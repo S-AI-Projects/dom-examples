@@ -166,3 +166,40 @@ By participating in and contributing to our projects and discussions, you acknow
 You can communicate with the MDN Web Docs team and community using the [communication channels][].
 
 [communication channels]: https://developer.mozilla.org/en-US/docs/MDN/Community/Communication_channels
+
+## R55-T011: CSS Painting keyboard accessibility test
+
+The `css-painting/` index is a static navigation page containing five CSS Painting API examples.
+
+The R55-T011 accessibility regression test checks:
+
+- The page has a descriptive heading and a main landmark.
+- A skip-to-main-content link is hidden until keyboard focus and becomes visible when focused.
+- Enter activates the skip link and moves focus to the main content.
+- Tab and Shift+Tab navigate the example links in the expected order.
+- Focused links have a visible focus outline.
+- Enter activates all five example links.
+- The page loads without browser JavaScript errors or failed resource requests.
+
+### Prerequisites
+
+- Node.js
+- Python 3
+- Playwright (`1.65.0`)
+- Playwright Chromium browser
+
+If Playwright is not installed locally, install it with:
+
+    npm install --no-save --package-lock=false playwright@1.65.0
+
+Install the Chromium browser if necessary:
+
+    npx playwright install chromium
+
+### Run the test
+
+From the repository root:
+
+    node tests/course/r55-t011.mjs
+
+The test starts and stops its own local Python HTTP server and Chromium browser. It saves the test results, environment versions, and keyboard-focus screenshot under `work/R55-T011/`.

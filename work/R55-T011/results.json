@@ -1,0 +1,147 @@
+{
+  "task": "R55-T011",
+  "page": "http://127.0.0.1:8765/css-painting/",
+  "browser": "Chromium",
+  "checks": [
+    {
+      "name": "Page loads successfully",
+      "expected": 200,
+      "actual": 200,
+      "passed": true
+    },
+    {
+      "name": "Page has one descriptive H1",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "name": "Main landmark has expected ID",
+      "expected": "main-content",
+      "actual": "main-content",
+      "passed": true
+    },
+    {
+      "name": "No positive tabindex values",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "Skip link starts visually hidden",
+      "expected": "top < 0",
+      "actual": "top=-48px",
+      "passed": true
+    },
+    {
+      "name": "Tab reveals the skip link",
+      "expected": "visible on screen",
+      "actual": "top=16px",
+      "passed": true
+    },
+    {
+      "name": "Enter activates skip link and moves focus to main",
+      "expected": "#main-content",
+      "actual": "#main-content",
+      "passed": true
+    },
+    {
+      "name": "Main content contains five example links",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "Example link names and destinations remain unchanged",
+      "expected": [
+        [
+          "Half highlight, fixed size",
+          "half-highlight-fixed-size"
+        ],
+        [
+          "Half highlight, variable size",
+          "half-highlight-paintsize"
+        ],
+        [
+          "Fancy highlight",
+          "fancy-header-highlight"
+        ],
+        [
+          "Using custom properties",
+          "custom-properties"
+        ],
+        [
+          "Hollow highlight",
+          "hollow-highlight"
+        ]
+      ],
+      "actual": [
+        [
+          "Half highlight, fixed size",
+          "half-highlight-fixed-size"
+        ],
+        [
+          "Half highlight, variable size",
+          "half-highlight-paintsize"
+        ],
+        [
+          "Fancy highlight",
+          "fancy-header-highlight"
+        ],
+        [
+          "Using custom properties",
+          "custom-properties"
+        ],
+        [
+          "Hollow highlight",
+          "hollow-highlight"
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "name": "Tab from main reaches first example link",
+      "expected": "Half highlight, fixed size",
+      "actual": "Half highlight, fixed size",
+      "passed": true
+    },
+    {
+      "name": "Focused example link has visible outline",
+      "expected": "solid visible outline >= 3px",
+      "actual": {
+        "outlineStyle": "solid",
+        "outlineWidth": 3,
+        "outlineColor": "rgb(0, 95, 204)"
+      },
+      "passed": true
+    },
+    {
+      "name": "Tab traverses all five example links in order",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "Shift+Tab moves focus backwards",
+      "expected": "Using custom properties",
+      "actual": "Using custom properties",
+      "passed": true
+    },
+    {
+      "name": "Enter activates all five example links",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "No browser errors or failed resource requests",
+      "expected": [],
+      "actual": [],
+      "passed": true
+    }
+  ],
+  "summary": {
+    "passed": 15,
+    "total": 15
+  }
+}

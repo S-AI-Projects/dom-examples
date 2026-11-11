@@ -1,0 +1,20 @@
+{
+  "task": "R55-T011",
+  "page": "css-painting/index.html",
+  "tested_before_changes": true,
+  "baseline": {
+    "tab_reaches_first_example_link": true,
+    "tab_traverses_all_five_example_links": true,
+    "visible_keyboard_focus": true,
+    "shift_tab_reverse_navigation": true,
+    "enter_activates_focused_link": true,
+    "skip_to_content_link": false,
+    "main_landmark": false,
+    "page_heading": false
+  },
+  "observed_resource_errors": [
+    "css-painting/style.css returned HTTP 404",
+    "css-painting/script.js returned HTTP 404"
+  ],
+  "decision": "Preserve working keyboard navigation and add a tested skip-to-content link."
+}
