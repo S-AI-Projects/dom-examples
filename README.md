@@ -153,6 +153,32 @@ Do not specify supported browsers and their versions in code comments or prose, 
 
 - The "window-management-api" directory contains a basic demo to show usage of the [Window Management API](https://developer.mozilla.org/docs/Web/API/Window_Management_API). [View the demo live](https://mdn.github.io/dom-examples/window-management-api/).
 
+## Running the ScrollToOptions regression test
+
+The `scrolltooptions` example has a Playwright regression test that checks repeated initialization, scroll behavior, and the example's layout.
+
+To run the test:
+
+1. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. Install Playwright's Chromium browser:
+
+   ```bash
+   npx playwright install chromium
+   ```
+
+3. Run the regression test from the repository root:
+
+   ```bash
+   node tests/course/r55-t014.mjs
+   ```
+
+The test starts a local Python HTTP server, launches Chromium in a fresh browser context, runs the assertions, and saves test results and a screenshot in `work/R55-T014/`. Make sure Python 3 is installed and port 8000 is available.
+
 ## Contribute to MDN Web Docs
 
 You can contribute to MDN Web Docs and be a part of our community through content contributions, engineering, or translation work.

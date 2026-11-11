@@ -1,0 +1,179 @@
+{
+  "issue": "R55-T014",
+  "url": "http://127.0.0.1:8000/scrolltooptions/",
+  "baseline": {
+    "normalScrolling": "Manual tests with different left/top values and smooth/automatic behavior worked before the fix.",
+    "repeatedInitialization": {
+      "expectedScrollCalls": 1,
+      "actualScrollCalls": 2,
+      "result": "Failed before the duplicate-initialization guard was added."
+    }
+  },
+  "inputs": [
+    {
+      "left": 250,
+      "top": 300,
+      "scroll": false
+    },
+    {
+      "left": 450,
+      "top": 600,
+      "scroll": false
+    },
+    {
+      "left": 600,
+      "top": 700,
+      "scroll": true
+    }
+  ],
+  "checks": [
+    {
+      "name": "One form exists",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "name": "One #left input exists",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "name": "One #top input exists",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "name": "One #scroll checkbox exists",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "name": "#left is a number input",
+      "expected": "number",
+      "actual": "number"
+    },
+    {
+      "name": "#top is a number input",
+      "expected": "number",
+      "actual": "number"
+    },
+    {
+      "name": "#scroll is a checkbox",
+      "expected": "checkbox",
+      "actual": "checkbox"
+    },
+    {
+      "name": "Body width is 60% of the viewport",
+      "expected": "768px",
+      "actual": "768px"
+    },
+    {
+      "name": "Paragraph width preserves horizontal scrolling",
+      "expected": "3000px",
+      "actual": "3000px"
+    },
+    {
+      "name": "Form remains fixed",
+      "expected": "fixed",
+      "actual": "fixed"
+    },
+    {
+      "name": "Form width is preserved",
+      "expected": "300px",
+      "actual": "300px"
+    },
+    {
+      "name": "Form top offset is preserved",
+      "expected": "20px",
+      "actual": "20px"
+    },
+    {
+      "name": "Form left offset is preserved",
+      "expected": "20px",
+      "actual": "20px"
+    },
+    {
+      "name": "Page supports horizontal scrolling",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Page supports vertical scrolling",
+      "expected": true,
+      "actual": true
+    },
+    {
+      "name": "Repeated initialization does not add DOM nodes",
+      "expected": 37,
+      "actual": 37
+    },
+    {
+      "name": "Repeated initialization does not create timers",
+      "expected": 0,
+      "actual": 0
+    },
+    {
+      "name": "Submission 1 triggers exactly one scroll",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "name": "Submission 1 uses the requested scroll behavior",
+      "expected": "auto",
+      "actual": "auto"
+    },
+    {
+      "name": "Submission 1 reaches the requested position",
+      "expected": {
+        "left": 250,
+        "top": 300
+      },
+      "actual": {
+        "left": 250,
+        "top": 300
+      }
+    },
+    {
+      "name": "Submission 2 triggers exactly one scroll",
+      "expected": 2,
+      "actual": 2
+    },
+    {
+      "name": "Submission 2 uses the requested scroll behavior",
+      "expected": "auto",
+      "actual": "auto"
+    },
+    {
+      "name": "Submission 2 reaches the requested position",
+      "expected": {
+        "left": 450,
+        "top": 600
+      },
+      "actual": {
+        "left": 450,
+        "top": 600
+      }
+    },
+    {
+      "name": "Submission 3 triggers exactly one scroll",
+      "expected": 3,
+      "actual": 3
+    },
+    {
+      "name": "Submission 3 uses the requested scroll behavior",
+      "expected": "smooth",
+      "actual": "smooth"
+    },
+    {
+      "name": "No uncaught browser errors",
+      "expected": [],
+      "actual": []
+    }
+  ],
+  "versions": {
+    "node": "v26.13.0",
+    "python": "Python 3.15.2",
+    "playwright": "Version 1.65.0",
+    "chromium": "158.0.8127.18"
+  }
+}

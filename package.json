@@ -1,0 +1,24 @@
+{
+  "name": "dom-examples",
+  "version": "1.0.0",
+  "description": "Code examples that accompany various MDN DOM and Web API documentation pages.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/course/r55-t014.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/S-AI-Projects/dom-examples.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/S-AI-Projects/dom-examples/issues"
+  },
+  "homepage": "https://github.com/S-AI-Projects/dom-examples#readme",
+  "devDependencies": {
+    "playwright": "^1.65.0"
+  }
+}
