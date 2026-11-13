@@ -1,0 +1,15 @@
+{
+  "circlePixel": [
+    0,
+    0,
+    255,
+    255
+  ],
+  "oldPixel": [
+    0,
+    0,
+    0,
+    255
+  ],
+  "text": "Window.screenLeft: 160, Window.screenTop: 240"
+}

@@ -1,0 +1,15 @@
+{
+  "width": 640,
+  "height": 480,
+  "display": "block",
+  "marginTop": "50px",
+  "boundingWidth": 640,
+  "boundingHeight": 480,
+  "circlePixel": [
+    0,
+    0,
+    255,
+    255
+  ],
+  "text": "Window.screenLeft: 100, Window.screenTop: 200"
+}

@@ -1,0 +1,77 @@
+{
+  "task": "R55-T017",
+  "inputs": {
+    "initialScreenLeft": 100,
+    "initialScreenTop": 200,
+    "screenLeftChange": 60,
+    "screenTopChange": 40,
+    "canvasWidth": 640,
+    "canvasHeight": 480
+  },
+  "expected": {
+    "baselineCirclePixel": [
+      0,
+      0,
+      255,
+      255
+    ],
+    "changedCirclePixel": [
+      0,
+      0,
+      255,
+      255
+    ],
+    "previousCirclePosition": [
+      0,
+      0,
+      0,
+      255
+    ],
+    "finalScreenLeft": 160,
+    "finalScreenTop": 240
+  },
+  "actual": {
+    "baseline": {
+      "width": 640,
+      "height": 480,
+      "display": "block",
+      "marginTop": "50px",
+      "boundingWidth": 640,
+      "boundingHeight": 480,
+      "circlePixel": [
+        0,
+        0,
+        255,
+        255
+      ],
+      "text": "Window.screenLeft: 100, Window.screenTop: 200"
+    },
+    "changed": {
+      "circlePixel": [
+        0,
+        0,
+        255,
+        255
+      ],
+      "oldPixel": [
+        0,
+        0,
+        0,
+        255
+      ],
+      "text": "Window.screenLeft: 160, Window.screenTop: 240"
+    }
+  },
+  "checks": {
+    "canvasAndLayout": "passed",
+    "circleRendering": "passed",
+    "coordinateCompensation": "passed",
+    "javascriptErrors": []
+  },
+  "toolVersions": {
+    "node": "v26.13.0",
+    "playwright": "1.65.0",
+    "chromium": "158.0.8127.18",
+    "python": "Python 3.15.2"
+  }
+}
