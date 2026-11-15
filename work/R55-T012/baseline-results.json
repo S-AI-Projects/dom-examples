@@ -1,0 +1,40 @@
+{
+  "task": "R55-T012",
+  "baseline": {
+    "mobile": {
+      "viewport": "360x800",
+      "documentWidth": 360,
+      "clientWidth": 360,
+      "editorWidth": 331.21875,
+      "editorScrollWidth": 465,
+      "overflow": "auto",
+      "whiteSpace": "pre",
+      "editContextSupported": true,
+      "pageErrors": []
+    },
+    "desktop": {
+      "viewport": "1280x800",
+      "documentWidth": 1280,
+      "clientWidth": 1280,
+      "editorWidth": 1251.21875,
+      "editorScrollWidth": 1251,
+      "overflow": "auto",
+      "whiteSpace": "pre",
+      "editContextSupported": true,
+      "pageErrors": []
+    }
+  },
+  "keyboardTest": {
+    "viewport": "360x800",
+    "enterInsertedNewline": true,
+    "tabInsertedTab": true,
+    "documentWidth": 360,
+    "viewportWidth": 360,
+    "pageErrors": []
+  },
+  "screenshots": [
+    "baseline-mobile.png",
+    "baseline-desktop.png"
+  ],
+  "demoFilesChanged": false
+}

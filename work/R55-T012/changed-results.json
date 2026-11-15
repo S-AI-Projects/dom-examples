@@ -1,0 +1,41 @@
+[
+  {
+    "viewport": "360x800",
+    "measurements": {
+      "viewportWidth": 360,
+      "documentWidth": 360,
+      "documentClientWidth": 360,
+      "editorLeft": 14.390625,
+      "editorRight": 345.609375,
+      "editorWidth": 331.21875,
+      "editorScrollWidth": 465,
+      "editorClientWidth": 331,
+      "overflow": "auto",
+      "whiteSpace": "pre",
+      "editContextSupported": true
+    },
+    "pageErrors": []
+  },
+  {
+    "viewport": "1280x800",
+    "measurements": {
+      "viewportWidth": 1280,
+      "documentWidth": 1280,
+      "documentClientWidth": 1280,
+      "editorLeft": 14.390625,
+      "editorRight": 1265.609375,
+      "editorWidth": 1251.21875,
+      "editorScrollWidth": 1251,
+      "editorClientWidth": 1251,
+      "overflow": "auto",
+      "whiteSpace": "pre",
+      "editContextSupported": true
+    },
+    "pageErrors": []
+  },
+  {
+    "keyboardTest": "PASS",
+    "newlineAndTabInserted": true,
+    "pageErrors": []
+  }
+]

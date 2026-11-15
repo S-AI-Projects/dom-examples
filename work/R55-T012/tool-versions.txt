@@ -1,0 +1,4 @@
+Node.js: v26.13.0
+Playwright: 1.65.0
+Python HTTP server: 3.15.2
+Browser: Chromium (Playwright-managed)
