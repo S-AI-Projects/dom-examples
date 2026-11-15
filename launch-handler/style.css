@@ -43,3 +43,14 @@ video {
 .not-supported {
   color: red;
 }
+
+.audio-status {
+  max-width: 80ch;
+  margin-block: 1rem;
+  color: #b42318;
+  font-weight: 600;
+}
+
+.audio-status[hidden] {
+  display: none;
+}

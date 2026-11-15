@@ -2,7 +2,18 @@ import "https://unpkg.com/media-chrome@0.4.0/dist/index.js";
 
 const audio = document.querySelector("audio");
 const title = document.querySelector("media-text-display");
+const status = document.querySelector(".audio-status");
 
+audio.addEventListener("error", () => {
+  status.textContent =
+    "Unable to load this audio file. Check the link or try another audio file.";
+  status.hidden = false;
+});
+
+audio.addEventListener("loadstart", () => {
+  status.textContent = "";
+  status.hidden = true;
+});
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
     const registration = await navigator.serviceWorker.register("./sw.js");
