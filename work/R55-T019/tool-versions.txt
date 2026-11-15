@@ -1,0 +1,2 @@
+Node.js: v26.13.0
+Playwright: 1.65.0
