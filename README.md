@@ -1,4 +1,9 @@
-# dom-examples
+## Deterministic browser test: dynamic-range-limit
+
+Run the browser regression test from the repository root:
+
+```bash
+node tests/course/r55-t015.mjs# dom-examples
 
 Code examples that accompany various MDN DOM and Web API documentation pages.
 
@@ -166,3 +171,22 @@ By participating in and contributing to our projects and discussions, you acknow
 You can communicate with the MDN Web Docs team and community using the [communication channels][].
 
 [communication channels]: https://developer.mozilla.org/en-US/docs/MDN/Community/Communication_channels
+
+## Deterministic browser test: dynamic-range-limit
+
+Run the browser regression test from the repository root:
+
+```bash
+node tests/course/r55-t015.mjs
+
+```
+
+The test starts a local HTTP server and launches Chromium using Playwright. It checks that:
+
+- The local demo image loads successfully.
+- The initial `dynamic-range-limit` value is `standard`.
+- Hover and keyboard focus change the value to `no-limit`.
+- Two fresh browser contexts produce identical results.
+- No unexpected JavaScript page errors occur.
+
+The test uses a fixed viewport of 1280 × 800 and waits for CSS transitions before checking computed styles.

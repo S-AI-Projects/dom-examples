@@ -1,0 +1,26 @@
+{
+  "test": "R55-T015 dynamic-range-limit",
+  "status": "PASS",
+  "playwrightVersion": "1.65.0",
+  "contextsCompared": 2,
+  "results": {
+    "initial": {
+      "title": "dynamic-range-limit property demo",
+      "heading": "dynamic-range-limit property demo",
+      "imageLoaded": true,
+      "imageWidth": 2856,
+      "imageAlt": "A subway station, with white strip lights lighting the platform and ad posters in the background",
+      "tabIndex": 0,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "supportsProperty": true,
+      "value": "standard",
+      "fontFamily": "sans-serif"
+    },
+    "hover": "no-limit",
+    "focus": "no-limit",
+    "pageErrors": []
+  }
+}
