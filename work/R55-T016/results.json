@@ -1,0 +1,80 @@
+{
+  "issue": "R55-T016",
+  "page": "fullscreen-api/index.html",
+  "date": "2026-11-15T11:49:10.366Z",
+  "browser": "158.0.8127.18",
+  "node": "v26.13.0",
+  "playwright": "1.65.0",
+  "server": "python3 -m http.server",
+  "inputs": {
+    "unsupported": "Fullscreen API disabled through browser initialization.",
+    "missingMethod": "HTMLVideoElement.requestFullscreen unavailable.",
+    "supported": "Mocked requestFullscreen and exitFullscreen methods."
+  },
+  "results": [
+    {
+      "name": "Video element exists",
+      "expected": 1,
+      "actual": 1,
+      "result": "PASS"
+    },
+    {
+      "name": "Credits section exists",
+      "expected": 1,
+      "actual": 1,
+      "result": "PASS"
+    },
+    {
+      "name": "Fullscreen status element has accessible role",
+      "expected": 1,
+      "actual": 1,
+      "result": "PASS"
+    },
+    {
+      "name": "Video uses responsive max-width",
+      "expected": "100%",
+      "actual": "100%",
+      "result": "PASS"
+    },
+    {
+      "name": "Unsupported browser displays fallback",
+      "expected": "Fullscreen mode is not supported by this browser.",
+      "actual": "Fullscreen mode is not supported by this browser.",
+      "result": "PASS"
+    },
+    {
+      "name": "Video remains available when fullscreen is unsupported",
+      "expected": 1,
+      "actual": 1,
+      "result": "PASS"
+    },
+    {
+      "name": "Missing fullscreen method displays fallback",
+      "expected": "Fullscreen mode is not supported by this browser.",
+      "actual": "Fullscreen mode is not supported by this browser.",
+      "result": "PASS"
+    },
+    {
+      "name": "Enter key activates fullscreen",
+      "expected": true,
+      "actual": true,
+      "result": "PASS"
+    },
+    {
+      "name": "Second Enter key exits fullscreen",
+      "expected": true,
+      "actual": true,
+      "result": "PASS"
+    },
+    {
+      "name": "Status clears after successful toggle",
+      "expected": "",
+      "actual": "",
+      "result": "PASS"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0
+  }
+}
