@@ -10,12 +10,25 @@
    5. 2-finger move/pinch/swipe
 -->
   <head>
+    <meta charset="utf-8" />
     <title>Touch Events tutorial</title>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.5;
+        margin: 16px;
+        color: #111;
+        background: #fff;
+      }
       div {
-        margin: 0em;
-        padding: 2em;
+        margin: 10px 0;
+        padding: 1.5em;
+        touch-action: none;
+        user-select: none;
       }
 
       #target1,
@@ -24,6 +37,28 @@
       #target4 {
         background: white;
         border: 1px solid black;
+        border-radius: 4px;
+        transition: background-color 0.1s ease;
+      }
+
+      button {
+        padding: 8px 12px;
+        font-size: 14px;
+        margin-right: 8px;
+        cursor: pointer;
+      }
+
+      output {
+        display: block;
+        margin-top: 12px;
+        padding: 8px;
+        background: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 13px;
+        min-height: 24px;
+        white-space: pre-wrap;
       }
     </style>
 
@@ -40,6 +75,7 @@
 
       function log(name, ev, printTargetIds) {
         var o = document.getElementsByTagName("output")[0];
+        if (!o) return;
         var s =
           name +
           ": touches = " +
@@ -61,7 +97,7 @@
 
       function clearLog(event) {
         var o = document.getElementsByTagName("output")[0];
-        o.innerHTML = "";
+        if (o) o.innerHTML = "";
       }
 
       function update_background(ev) {
@@ -72,7 +108,7 @@
         //   lightblue - more than two taps
         switch (ev.targetTouches.length) {
           case 1:
-            // Single tap`
+            // Single tap
             ev.target.style.background = "yellow";
             break;
           case 2:
@@ -120,11 +156,6 @@
       }
 
       function start_handler(ev) {
-        // If the user makes simultaneious touches, the browser will fire a
-        // separate touchstart event for each touch point. Thus if there are
-        // three simultaneous touches, the first touchstart event will have
-        // targetTouches length of one, the second event will have a length
-        // of two, and so on.
         ev.preventDefault();
         // Cache the touch points for later processing of 2-touch pinch/zoom
         if (ev.targetTouches.length == 2) {
@@ -137,13 +168,6 @@
       }
 
       function move_handler(ev) {
-        // Note: if the user makes more than one "simultaneous" touches, most browsers
-        // fire at least one touchmove event and some will fire several touchmoves.
-        // Consequently, an application might want to "ignore" some touchmoves.
-        //
-        // This function sets the target element's outline to "dashed" to visualy
-        // indicate the target received a move event.
-        //
         ev.preventDefault();
         if (logEvents) log("touchMove", ev, false);
         // To avoid too much color flashing many touchmove events are started,
@@ -172,6 +196,7 @@
       function set_handlers(name) {
         // Install event handlers for the given element
         var el = document.getElementById(name);
+        if (!el) return;
         el.ontouchstart = start_handler;
         el.ontouchmove = move_handler;
         // Use same handler for touchcancel and touchend
@@ -196,10 +221,10 @@
     <div id="target4">Tap, Hold or Swipe me 4</div>
 
     <!-- UI for logging/debugging -->
-    <button id="log" onclick="enableLog(event);">
+    <button id="log" type="button" onclick="enableLog(event);">
       Start/Stop event logging
     </button>
-    <button id="clearlog" onclick="clearLog(event);">Clear the log</button>
+    <button id="clearlog" type="button" onclick="clearLog(event);">Clear the log</button>
     <p></p>
     <output></output>
   </body>
