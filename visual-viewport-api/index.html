@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+  <meta charset="utf-8" />
   <title>Visual Viewport API example</title>
-  <script async src="main.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="style.css" rel="stylesheet" type="text/css">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script async src="main.js"></script>
 </head>
 
 <body>
-  <p id="instructions">
+  <p id="instructions" tabindex="0">
     Try scrolling around and pinch-zooming to see how the reported values change.
   </p>
-  <div id="output">
+  <div id="output" tabindex="0" role="region" aria-label="Viewport information">
     <p id="visual-info"></p>
     <hr>
     <p id="window-info"></p>
