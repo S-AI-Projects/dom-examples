@@ -120,6 +120,39 @@
           </div>
         </div>
       </div>
+      <!-- Isolated Safe Text Rendering Companion Example -->
+      <section id="safe-text-companion" class="panel panel-default" style="margin-top: 25px;">
+        <div class="panel-heading">
+          <h4 class="panel-title">Safe Text Rendering Companion</h4>
+        </div>
+        <div class="panel-body">
+          <p>This companion demonstrates how to insert untrusted fixture or user text safely into the DOM without HTML tag injection:</p>
+          <div class="input-group">
+            <input type="text" id="fixture-input" class="form-control" value='<img src="x" onerror="window.__xssInjected=true">' />
+            <span class="input-group-btn">
+              <button id="render-text-btn" class="btn btn-primary" type="button">Render as Text</button>
+            </span>
+          </div>
+          <div style="margin-top: 15px;">
+            <label>Rendered Output Container:</label>
+            <div id="rendered-output" class="well well-sm" style="min-height: 40px;"></div>
+          </div>
+        </div>
+      </section>
+      <script>
+        (function() {
+          const input = document.getElementById("fixture-input");
+          const btn = document.getElementById("render-text-btn");
+          const output = document.getElementById("rendered-output");
+          function renderSafe(val) {
+            if (output) output.textContent = val;
+          }
+          if (btn && input) {
+            btn.addEventListener("click", () => renderSafe(input.value));
+            renderSafe(input.value);
+          }
+        })();
+      </script>
     </div>
   </body>
 </html>
