@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=en>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Recommend a Payment App when User Has No Apps</title>
@@ -8,11 +8,44 @@
     `PaymentRequest.show()`, while intercepting the NOT_SUPPORTED_ERR exception. If this 
     payment method is not supported, it redirects to the download page for BobBucks
   -->
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.5;
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
     #success,
-    #legacy {
+    #legacy,
+    #empty-cart-state {
       display: none;
+    }
+    .panel {
+      padding: 16px;
+      border-radius: 6px;
+      margin-top: 16px;
+    }
+    .panel-success {
+      background: #e6f4ea;
+      border: 1px solid #ceead6;
+      color: #137333;
+    }
+    .panel-warning {
+      background: #fef7e0;
+      border: 1px solid #feefc3;
+      color: #b06000;
+    }
+    .panel-error {
+      background: #fce8e6;
+      border: 1px solid #fad2cf;
+      color: #c5221f;
+    }
+    button {
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 1rem;
     }
   </style>
 </head>
@@ -25,84 +58,129 @@
       In this example, if you select to pay with BobBucks on this merchant page, it tries to 
       call <code>PaymentRequest.show()</code>, while intercepting the 
       <code>NOT_SUPPORTED_ERR exception</code>. If this payment method is not supported, 
-      it redirects to the download page for BobBucks
+      it redirects to the download page for BobBucks.
     </p>      
     <p>
       For the purposes of the demo, imagine you have chosen an item and
       now you need to check out.
     </p>
+
+    <div id="cart-display">
+      <p>Item: <strong id="cart-item-name">Example item</strong> - <span id="cart-item-price">$1.00</span></p>
+    </div>
     
     <button id="checkout-button">Checkout</button>
+    <button id="clear-cart-button" type="button" style="margin-left: 8px;">Empty Cart</button>
+  </div>
+
+  <div id="empty-cart-state" class="panel panel-warning" role="alert">
+    <p><strong>Your cart is empty.</strong> Please add an item before proceeding to checkout.</p>
+    <button id="restore-cart-button" type="button">Restore Demo Item</button>
   </div>
   
-  <div id="success">
+  <div id="success" class="panel panel-success" role="status">
     <p>
       Payment Request success. Demo complete. No payment has been taken.
     </p>
+    <button id="reset-success-button" type="button">Start Over</button>
   </div>  
 
-  <div id="legacy">
-    <p>
-      The Payment Request API is unsupported or was cancelled or failed.
-      Here we can proceed with a fallback (not implemented for this demo).
+  <div id="legacy" class="panel panel-error" role="alert">
+    <p id="error-message">
+      The Payment Request was cancelled, unsupported, or encountered an error.
     </p>
+    <p>You can proceed with a fallback option or retry checkout.</p>
+    <button id="retry-button" type="button">Retry Checkout</button>
   </div>
 
   <script type="text/javascript">
-    
     var checkoutButton = document.getElementById('checkout-button');
+    var clearCartButton = document.getElementById('clear-cart-button');
+    var restoreCartButton = document.getElementById('restore-cart-button');
+    var retryButton = document.getElementById('retry-button');
+    var resetSuccessButton = document.getElementById('reset-success-button');
     var introPanel = document.getElementById('intro');
+    var emptyCartPanel = document.getElementById('empty-cart-state');
     var successPanel = document.getElementById('success');
     var legacyPanel = document.getElementById('legacy');
+    var errorMessageEl = document.getElementById('error-message');
 
-    // Feature detection
-    if (window.PaymentRequest) {
+    var cartItems = [
+      { label: 'Example item', amount: { currency: 'USD', value: '1.00' } }
+    ];
 
-      // Payment Request is supported in this browser, so we can proceed to use it
-
-      checkoutButton.addEventListener('click', function() {
-
-        var request = new PaymentRequest(buildSupportedPaymentMethodData(),
-          buildShoppingCartDetails());
-
-        request.show().then(function(paymentResponse) {
-          // Here we would process the payment. For this demo, simulate immediate success:
-          paymentResponse.complete('success')
-            .then(function() {
-                // For demo purposes:
-                introPanel.style.display = 'none';
-                successPanel.style.display = 'block';
-              });
-
-        }).catch(function(error) {
-
-          if (error.code == DOMException.NOT_SUPPORTED_ERR) {
-
-            // BobBucks not currently supported. Usually we might now wish to redirect
-            // to a signup page and we could pass our current URL so it could redirect 
-            // (or link) back to this page afterwards. For this demo, we are just 
-            // redirecting to the BobBucks download page.
-
-            window.location.href =
-              'https://bobbucks.dev/#download';
-
-          } else {
-            // Other kinds of errors; cancelled or failed payment. For demo purposes:
-            introPanel.style.display = 'none';
-            legacyPanel.style.display = 'block';
-          }
-
-        });        
+    function showPanel(panelToShow) {
+      [introPanel, emptyCartPanel, successPanel, legacyPanel].forEach(function(p) {
+        if (p) p.style.display = 'none';
       });
-    } else {
-      
-      // Payment Request is unsupported
-      checkoutButton.addEventListener('click', function() {
-        // For demo purposes:
-        introPanel.style.display = 'none';
-        legacyPanel.style.display = 'block';
+      if (panelToShow) panelToShow.style.display = 'block';
+    }
+
+    if (clearCartButton) {
+      clearCartButton.addEventListener('click', function() {
+        cartItems = [];
+        showPanel(emptyCartPanel);
       });
     }
+
+    if (restoreCartButton) {
+      restoreCartButton.addEventListener('click', function() {
+        cartItems = [
+          { label: 'Example item', amount: { currency: 'USD', value: '1.00' } }
+        ];
+        showPanel(introPanel);
+      });
+    }
+
+    if (retryButton) {
+      retryButton.addEventListener('click', function() {
+        showPanel(introPanel);
+      });
+    }
+
+    if (resetSuccessButton) {
+      resetSuccessButton.addEventListener('click', function() {
+        showPanel(introPanel);
+      });
+    }
+
+    checkoutButton.addEventListener('click', function() {
+      if (!cartItems || cartItems.length === 0) {
+        showPanel(emptyCartPanel);
+        return;
+      }
+
+      // Feature detection
+      if (window.PaymentRequest) {
+        try {
+          var request = new PaymentRequest(buildSupportedPaymentMethodData(), buildShoppingCartDetails());
+          request.show().then(function(paymentResponse) {
+            paymentResponse.complete('success').then(function() {
+              showPanel(successPanel);
+            });
+          }).catch(function(error) {
+            if (error && error.code === DOMException.NOT_SUPPORTED_ERR) {
+              window.location.href = 'https://bobbucks.dev/#download';
+            } else {
+              if (errorMessageEl) {
+                errorMessageEl.textContent = 'Payment cancelled or failed: ' + (error ? error.message : 'Unknown error');
+              }
+              showPanel(legacyPanel);
+            }
+          });
+        } catch (e) {
+          if (errorMessageEl) {
+            errorMessageEl.textContent = 'Unable to initialize PaymentRequest: ' + e.message;
+          }
+          showPanel(legacyPanel);
+        }
+      } else {
+        if (errorMessageEl) {
+          errorMessageEl.textContent = 'Payment Request API is not supported in this browser.';
+        }
+        showPanel(legacyPanel);
+      }
+    });
 
     function buildSupportedPaymentMethodData() {
       return [{
@@ -111,18 +189,15 @@
     }
 
     function buildShoppingCartDetails() {
-      // Hardcoded for demo purposes:
+      var totalValue = cartItems.reduce(function(acc, item) {
+        return acc + parseFloat(item.amount.value);
+      }, 0);
       return {
         id: 'order-123',
-        displayItems: [
-          {
-            label: 'Example item',
-            amount: {currency: 'USD', value: '1.00'}
-          }
-        ],
+        displayItems: cartItems,
         total: {
           label: 'Total',
-          amount: {currency: 'USD', value: '1.00'}
+          amount: { currency: 'USD', value: totalValue.toFixed(2) }
         }
       };
     }
