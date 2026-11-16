@@ -1,6 +1,7 @@
 // create an instance of a db object for us to store the IDB data in
-let db;
+let db = null;
 let activeIndex;
+let activeController = null;
 
 const contacts = [
   {
@@ -105,52 +106,72 @@ const contacts = [
   },
 ];
 
-// all the variables we need for the app
+function cleanupApp() {
+  if (activeController) {
+    activeController.abort();
+    activeController = null;
+  }
+  if (db) {
+    try {
+      db.close();
+    } catch (_) {}
+    db = null;
+  }
+}
 
-const tableEntry = document.querySelector("tbody");
+function initApp(onReady) {
+  // Clean up any existing instance first to guarantee idempotency
+  cleanupApp();
+  activeController = new AbortController();
+  const { signal } = activeController;
 
-window.onload = function () {
-  // In the following line, you should include the prefixes of implementations you want to test.
+  const tableEntry = document.querySelector("tbody");
+  if (tableEntry) {
+    tableEntry.innerHTML = "";
+  }
+
   window.indexedDB =
     window.indexedDB ||
     window.mozIndexedDB ||
     window.webkitIndexedDB ||
     window.msIndexedDB;
-  // DON'T use "const indexedDB = ..." if you're not in a function.
-  // Moreover, you may need references to some window.IDB* objects:
+
   window.IDBTransaction =
     window.IDBTransaction ||
     window.webkitIDBTransaction ||
     window.msIDBTransaction;
   window.IDBKeyRange =
     window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-  // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
 
   const DBOpenRequest = window.indexedDB.open("contactsList", 1);
 
   DBOpenRequest.onsuccess = function (event) {
+    if (signal.aborted) return;
     db = DBOpenRequest.result;
     populateData();
   };
 
   DBOpenRequest.onupgradeneeded = function (event) {
-    const db = event.target.result;
+    const upgradedDb = event.target.result;
 
-    db.onerror = function (event) {
+    upgradedDb.onerror = function (event) {
       console.log("Error loading database.");
     };
 
-    const objectStore = db.createObjectStore("contactsList", { keyPath: "id" });
-    objectStore.createIndex("lName", "lName", { unique: false });
-    objectStore.createIndex("fName", "fName", { unique: false });
-    objectStore.createIndex("jTitle", "jTitle", { unique: false });
-    objectStore.createIndex("company", "company", { unique: false });
-    objectStore.createIndex("eMail", "eMail", { unique: true });
-    objectStore.createIndex("phone", "phone", { unique: false });
-    objectStore.createIndex("age", "age", { unique: false });
+    if (!upgradedDb.objectStoreNames.contains("contactsList")) {
+      const objectStore = upgradedDb.createObjectStore("contactsList", { keyPath: "id" });
+      objectStore.createIndex("lName", "lName", { unique: false });
+      objectStore.createIndex("fName", "fName", { unique: false });
+      objectStore.createIndex("jTitle", "jTitle", { unique: false });
+      objectStore.createIndex("company", "company", { unique: false });
+      objectStore.createIndex("eMail", "eMail", { unique: true });
+      objectStore.createIndex("phone", "phone", { unique: false });
+      objectStore.createIndex("age", "age", { unique: false });
+    }
   };
 
   function populateData() {
+    if (signal.aborted || !db) return;
     const transaction = db.transaction(["contactsList"], "readwrite");
     const objectStore = transaction.objectStore("contactsList");
     for (let i = 0; i < contacts.length; i++) {
@@ -158,147 +179,108 @@ window.onload = function () {
     }
 
     transaction.oncomplete = function () {
+      if (signal.aborted) return;
       displayDataByKey();
     };
   }
 
-  const thControls = document.querySelectorAll("th");
-  for (let i = 0; i < thControls.length; i++) {
-    const activeThead = thControls[i];
-    activeThead.onclick = function (e) {
-      activeIndex = e.target.innerHTML;
-      if (activeIndex == "ID") {
-        displayDataByKey();
-      } else {
-        if (activeIndex == "Last name") {
+  const table = document.querySelector("table");
+  if (table) {
+    table.addEventListener(
+      "click",
+      function (e) {
+        const th = e.target.closest("th");
+        if (!th) return;
+        const text = th.textContent.trim();
+        if (text === "ID") {
+          displayDataByKey();
+        } else if (text === "Last name") {
           displayDataByIndex("lName");
-        } else if (activeIndex == "First name") {
+        } else if (text === "First name") {
           displayDataByIndex("fName");
-        } else if (activeIndex == "Job title") {
+        } else if (text === "Job title") {
           displayDataByIndex("jTitle");
-        } else if (activeIndex == "Company") {
+        } else if (text === "Company") {
           displayDataByIndex("company");
-        } else if (activeIndex == "E-mail") {
+        } else if (text === "E-mail") {
           displayDataByIndex("eMail");
-        } else if (activeIndex == "Phone") {
+        } else if (text === "Phone") {
           displayDataByIndex("phone");
-        } else if (activeIndex == "Age") {
+        } else if (text === "Age") {
           displayDataByIndex("age");
         }
-      }
-    };
+      },
+      { signal }
+    );
   }
 
   function displayDataByKey() {
-    tableEntry.innerHTML = "";
+    if (signal.aborted || !db) return;
+    const tbody = document.querySelector("tbody");
+    if (!tbody) return;
+    tbody.innerHTML = "";
     const transaction = db.transaction(["contactsList"], "readonly");
     const objectStore = transaction.objectStore("contactsList");
 
     objectStore.openCursor().onsuccess = function (event) {
+      if (signal.aborted) return;
       const cursor = event.target.result;
       if (cursor) {
         const tableRow = document.createElement("tr");
         tableRow.innerHTML =
-          "<td>" +
-          cursor.value.id +
-          "</td>" +
-          "<td>" +
-          cursor.value.lName +
-          "</td>" +
-          "<td>" +
-          cursor.value.fName +
-          "</td>" +
-          "<td>" +
-          cursor.value.jTitle +
-          "</td>" +
-          "<td>" +
-          cursor.value.company +
-          "</td>" +
-          "<td>" +
-          cursor.value.eMail +
-          "</td>" +
-          "<td>" +
-          cursor.value.phone +
-          "</td>" +
-          "<td>" +
-          cursor.value.age +
-          "</td>";
-        tableEntry.appendChild(tableRow);
-
+          "<td>" + cursor.value.id + "</td>" +
+          "<td>" + cursor.value.lName + "</td>" +
+          "<td>" + cursor.value.fName + "</td>" +
+          "<td>" + cursor.value.jTitle + "</td>" +
+          "<td>" + cursor.value.company + "</td>" +
+          "<td>" + cursor.value.eMail + "</td>" +
+          "<td>" + cursor.value.phone + "</td>" +
+          "<td>" + cursor.value.age + "</td>";
+        tbody.appendChild(tableRow);
         cursor.continue();
       } else {
-        console.log("Entries all displayed.");
+        if (typeof onReady === "function") onReady();
+        window.dispatchEvent(new CustomEvent("idb-data-rendered"));
       }
     };
   }
 
-  function displayDataByIndex(activeIndex) {
-    tableEntry.innerHTML = "";
+  function displayDataByIndex(idx) {
+    if (signal.aborted || !db) return;
+    const tbody = document.querySelector("tbody");
+    if (!tbody) return;
+    tbody.innerHTML = "";
     const transaction = db.transaction(["contactsList"], "readonly");
     const objectStore = transaction.objectStore("contactsList");
-
-    const myIndex = objectStore.index(activeIndex);
-
-    console.log(myIndex.name);
-    console.log(myIndex.objectStore);
-    console.log(myIndex.keyPath);
-    console.log(myIndex.multiEntry);
-    console.log(myIndex.unique);
-
-    const countRequest = myIndex.count();
-    countRequest.onsuccess = function () {
-      console.log(countRequest.result);
-    };
-
-    if (activeIndex == "fName") {
-      const getRequest = myIndex.get("Mr");
-      getRequest.onsuccess = function () {
-        console.log(getRequest.result);
-      };
-    }
-
-    if (activeIndex == "lName") {
-      const getKeyRequest = myIndex.getKey("Bungle");
-      getKeyRequest.onsuccess = function () {
-        console.log(getKeyRequest.result);
-      };
-    }
+    const myIndex = objectStore.index(idx);
 
     myIndex.openCursor().onsuccess = function (event) {
+      if (signal.aborted) return;
       const cursor = event.target.result;
       if (cursor) {
         const tableRow = document.createElement("tr");
         tableRow.innerHTML =
-          "<td>" +
-          cursor.value.id +
-          "</td>" +
-          "<td>" +
-          cursor.value.lName +
-          "</td>" +
-          "<td>" +
-          cursor.value.fName +
-          "</td>" +
-          "<td>" +
-          cursor.value.jTitle +
-          "</td>" +
-          "<td>" +
-          cursor.value.company +
-          "</td>" +
-          "<td>" +
-          cursor.value.eMail +
-          "</td>" +
-          "<td>" +
-          cursor.value.phone +
-          "</td>" +
-          "<td>" +
-          cursor.value.age +
-          "</td>";
-        tableEntry.appendChild(tableRow);
-
+          "<td>" + cursor.value.id + "</td>" +
+          "<td>" + cursor.value.lName + "</td>" +
+          "<td>" + cursor.value.fName + "</td>" +
+          "<td>" + cursor.value.jTitle + "</td>" +
+          "<td>" + cursor.value.company + "</td>" +
+          "<td>" + cursor.value.eMail + "</td>" +
+          "<td>" + cursor.value.phone + "</td>" +
+          "<td>" + cursor.value.age + "</td>";
+        tbody.appendChild(tableRow);
         cursor.continue();
       } else {
-        console.log("Entries all displayed.");
+        window.dispatchEvent(new CustomEvent("idb-data-rendered"));
       }
     };
   }
-};
+}
+
+window.initApp = initApp;
+window.cleanupApp = cleanupApp;
+window.contacts = contacts;
+
+window.addEventListener("DOMContentLoaded", () => {
+  initApp();
+});
