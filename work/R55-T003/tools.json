@@ -1,0 +1,19 @@
+{
+  "taskId": "R55-T003",
+  "toolVersions": {
+    "node": "v24.22.1",
+    "playwright": "1.49.0",
+    "browser": "Chromium / Google Chrome (Headless)"
+  },
+  "assertions": [
+    "No uncaught page errors across all test phases",
+    "Initial visibility: #intro visible, #legacy, #success, #empty-cart-state hidden",
+    "Empty cart fixture triggers meaningful empty state",
+    "Restoring cart recovers to #intro cleanly",
+    "Payment failure displays #legacy with descriptive error",
+    "Retry action recovers cleanly to #intro",
+    "Payment success displays #success status"
+  ],
+  "result": "PASSED",
+  "exitCode": 0
+}

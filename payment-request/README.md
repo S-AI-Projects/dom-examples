@@ -13,3 +13,26 @@
 * [Payment Request Codelab](https://codelabs.developers.google.com/codelabs/payment-request-api/#0) from Google
 * [VeggieShop](https://github.com/pjbazin/wpwg-demo) e-commerce website demo and source code
 * [WhiteCollar](https://github.com/pjbazin/wpwg-demo/tree/master/WhiteCollar) web payment app demo and source code
+
+
+## Running Locally
+
+To run the Payment Request examples locally:
+
+```bash
+# Using Python
+python3 -m http.server 8000
+
+# Using Node / npx
+npx serve .
+```
+
+Open `http://localhost:8000/payment-request/recommend-payment-app.html`.
+
+## Running Tests
+
+Automated regression tests verify empty cart states, error fallback displays, recovery mechanisms, and absence of uncaught errors:
+
+```bash
+node tests/course/r55-t003.mjs
+```
