@@ -2,37 +2,60 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CSS carousel demo</title>
 
     <link href="styles.css" rel="stylesheet" />
   </head>
   <body>
     <h1>CSS carousel demo 1</h1>
+
+    <div id="unsupported-notice" class="feature-fallback-notice" role="note">
+      <p><strong>Note:</strong> Your browser does not currently support CSS Scroll Markers or CSS Scroll Buttons (<code>scroll-marker-group</code>). Standard horizontal scroll and keyboard swipe/arrow controls are active as a fallback.</p>
+    </div>
+
     <ul>
       <li>
         <h2>Page 1</h2>
         <p>This is the first page of content.</p>
-        <p><a href="#">A demo link</a>.</p>
-        <p><button>Press me</button></p>
+        <p><a href="#page1">A demo link</a>.</p>
+        <p><button type="button">Press me</button></p>
       </li>
       <li>
         <h2>Page 2</h2>
         <p>This is the second page of content.</p>
-        <p><a href="#">A demo link</a>.</p>
-        <p><button>Press me</button></p>
+        <p><a href="#page2">A demo link</a>.</p>
+        <p><button type="button">Press me</button></p>
       </li>
       <li>
         <h2>Page 3</h2>
         <p>This is the third page of content.</p>
-        <p><a href="#">A demo link</a>.</p>
-        <p><button>Press me</button></p>
+        <p><a href="#page3">A demo link</a>.</p>
+        <p><button type="button">Press me</button></p>
       </li>
       <li>
         <h2>Page 4</h2>
         <p>This is the fourth page of content.</p>
-        <p><a href="#">A demo link</a>.</p>
-        <p><button>Press me</button></p>
+        <p><a href="#page4">A demo link</a>.</p>
+        <p><button type="button">Press me</button></p>
       </li>
     </ul>
+
+    <script>
+      (function() {
+        const notice = document.getElementById('unsupported-notice');
+        const isSupported = (window.CSS && CSS.supports && (
+          CSS.supports('scroll-marker-group', 'after') ||
+          CSS.supports('scroll-marker-group: after')
+        ));
+        if (isSupported) {
+          document.body.classList.add('has-css-carousel');
+          if (notice) notice.style.setProperty('display', 'none', 'important');
+        } else {
+          document.body.classList.add('no-css-carousel');
+          if (notice) notice.style.setProperty('display', 'block', 'important');
+        }
+      })();
+    </script>
   </body>
 </html>

@@ -1,0 +1,17 @@
+{
+  "taskId": "R55-T006",
+  "toolVersions": {
+    "node": "v24.22.1",
+    "playwright": "1.49.0",
+    "browser": "Chromium / Google Chrome (Headless)"
+  },
+  "assertions": [
+    "No uncaught page errors in either test path",
+    "Feature-absent path renders visible fallback notification banner",
+    "Fallback notification explains lack of scroll-marker-group support",
+    "Feature-present path hides fallback notification",
+    "Links and buttons in carousel items remain interactive across both paths"
+  ],
+  "result": "PASSED",
+  "exitCode": 0
+}
