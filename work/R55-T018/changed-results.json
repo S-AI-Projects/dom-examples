@@ -1,0 +1,71 @@
+{
+  "task": "R55-T018",
+  "page": "http://127.0.0.1:4176/webgpu-render-demo/text-rendering.html",
+  "browser": "Chromium",
+  "fixture": "<p>Hello</p><img src=x onerror=\"window.__xssExecuted = true\">",
+  "contexts": [
+    {
+      "context": 1,
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "input": "<p>Hello</p><img src=x onerror=\"window.__xssExecuted = true\">",
+      "expected": {
+        "renderedText": "<p>Hello</p><img src=x onerror=\"window.__xssExecuted = true\">",
+        "injectedImageCount": 0,
+        "injectedParagraphCount": 0,
+        "childElementCount": 0,
+        "handlerExecuted": false,
+        "pageErrors": []
+      },
+      "actual": {
+        "renderedText": "<p>Hello</p><img src=x onerror=\"window.__xssExecuted = true\">",
+        "injectedImageCount": 0,
+        "injectedParagraphCount": 0,
+        "childElementCount": 0,
+        "handlerExecuted": false,
+        "layout": {
+          "viewportWidth": 1280,
+          "documentWidth": 1280,
+          "outputWidth": 1264,
+          "outputVisible": true
+        },
+        "pageErrors": []
+      },
+      "passed": true
+    },
+    {
+      "context": 2,
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "input": "<p>Hello</p><img src=x onerror=\"window.__xssExecuted = true\">",
+      "expected": {
+        "renderedText": "<p>Hello</p><img src=x onerror=\"window.__xssExecuted = true\">",
+        "injectedImageCount": 0,
+        "injectedParagraphCount": 0,
+        "childElementCount": 0,
+        "handlerExecuted": false,
+        "pageErrors": []
+      },
+      "actual": {
+        "renderedText": "<p>Hello</p><img src=x onerror=\"window.__xssExecuted = true\">",
+        "injectedImageCount": 0,
+        "injectedParagraphCount": 0,
+        "childElementCount": 0,
+        "handlerExecuted": false,
+        "layout": {
+          "viewportWidth": 360,
+          "documentWidth": 360,
+          "outputWidth": 344,
+          "outputVisible": true
+        },
+        "pageErrors": []
+      },
+      "passed": true
+    }
+  ],
+  "allPassed": true
+}

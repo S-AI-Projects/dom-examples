@@ -1,0 +1,16 @@
+{
+  "url": "http://127.0.0.1:4175/webgpu-render-demo/index.html",
+  "title": "WebGPU triangle",
+  "heading": "WebGPU triangle",
+  "canvas": {
+    "width": 800,
+    "height": 600
+  },
+  "scripts": [
+    "http://127.0.0.1:4175/webgpu-render-demo/script.js"
+  ],
+  "bodyText": "WebGPU triangle",
+  "pageErrors": [
+    "Couldn't request WebGPU adapter."
+  ]
+}

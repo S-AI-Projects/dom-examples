@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Safe Text Rendering</title>
+   <style>
+  main {
+    max-width: 100%;
+  }
+
+  textarea {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+</style>
+ <script src="text-rendering.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>Safe Text Rendering</h1>
+      <p>
+        Enter fixture text below. It will be displayed literally, not interpreted
+        as HTML.
+      </p>
+
+      <label for="fixtureInput">Fixture text</label>
+      <textarea id="fixtureInput" rows="5" cols="60"><p>Hello</p><img src=x onerror="window.__xssExecuted = true"></textarea>
+
+      <button id="renderButton" type="button">Render as text</button>
+
+      <h2>Rendered output</h2>
+      <pre id="textOutput" aria-live="polite"></pre>
+    </main>
+  </body>
+</html>
