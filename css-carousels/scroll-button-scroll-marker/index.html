@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CSS carousel demo</title>
 
     <link href="styles.css" rel="stylesheet" />
@@ -9,30 +10,39 @@
   <body>
     <h1>CSS carousel demo 1</h1>
     <ul>
-      <li>
+      <li id="carousel-item-1">
         <h2>Page 1</h2>
         <p>This is the first page of content.</p>
-        <p><a href="#">A demo link</a>.</p>
-        <p><button>Press me</button></p>
+        <p><a href="#page1">A demo link</a>.</p>
+        <p><button type="button">Press me</button></p>
       </li>
-      <li>
+      <li id="carousel-item-2">
         <h2>Page 2</h2>
         <p>This is the second page of content.</p>
-        <p><a href="#">A demo link</a>.</p>
-        <p><button>Press me</button></p>
+        <p><a href="#page2">A demo link</a>.</p>
+        <p><button type="button">Press me</button></p>
       </li>
-      <li>
+      <li id="carousel-item-3">
         <h2>Page 3</h2>
         <p>This is the third page of content.</p>
-        <p><a href="#">A demo link</a>.</p>
-        <p><button>Press me</button></p>
+        <p><a href="#page3">A demo link</a>.</p>
+        <p><button type="button">Press me</button></p>
       </li>
-      <li>
+      <li id="carousel-item-4">
         <h2>Page 4</h2>
         <p>This is the fourth page of content.</p>
-        <p><a href="#">A demo link</a>.</p>
-        <p><button>Press me</button></p>
+        <p><a href="#page4">A demo link</a>.</p>
+        <p><button type="button">Press me</button></p>
       </li>
     </ul>
+
+    <script>
+      document.querySelectorAll("ul li button").forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+          btn.textContent = `Pressed (Page ${index + 1})`;
+          btn.classList.add("is-pressed");
+        });
+      });
+    </script>
   </body>
 </html>
