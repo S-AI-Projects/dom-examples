@@ -27,109 +27,125 @@ fn main(
 // Main function
 
 async function init() {
+  const statusEl = document.querySelector("#status");
+  const codeEl = document.querySelector("#output-code");
+
   // 1: request adapter and device
   if (!navigator.gpu) {
-    throw Error("WebGPU not supported.");
+    const msg = "WebGPU not supported in this browser.";
+    if (statusEl) statusEl.textContent = msg;
+    if (codeEl) codeEl.textContent = "WebGPU API is unavailable.";
+    return;
   }
 
-  const adapter = await navigator.gpu.requestAdapter();
-  if (!adapter) {
-    throw Error("Couldn't request WebGPU adapter.");
+  try {
+    const adapter = await navigator.gpu.requestAdapter();
+    if (!adapter) {
+      const msg = "Couldn't request WebGPU adapter.";
+      if (statusEl) statusEl.textContent = msg;
+      if (codeEl) codeEl.textContent = msg;
+      return;
+    }
+
+    const device = await adapter.requestDevice();
+
+    // 2: Create a shader module from the shader template literal
+    const shaderModule = device.createShaderModule({
+      code: shader,
+    });
+
+    // 3: Create an output buffer to read GPU calculations to, and a staging buffer to be mapped for JavaScript access
+    const outputBuffer = device.createBuffer({
+      size: BUFFER_SIZE,
+      usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC,
+    });
+
+    const stagingBuffer = device.createBuffer({
+      size: BUFFER_SIZE,
+      usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST,
+    });
+
+    // 4: Create a GPUBindGroupLayout to define the bind group structure, create a GPUBindGroup from it,
+    // then use it to create a GPUComputePipeline
+    const bindGroupLayout = device.createBindGroupLayout({
+      entries: [
+        {
+          binding: 0,
+          visibility: GPUShaderStage.COMPUTE,
+          buffer: {
+            type: "storage",
+          },
+        },
+      ],
+    });
+
+    const bindGroup = device.createBindGroup({
+      layout: bindGroupLayout,
+      entries: [
+        {
+          binding: 0,
+          resource: {
+            buffer: outputBuffer,
+          },
+        },
+      ],
+    });
+
+    const computePipeline = device.createComputePipeline({
+      layout: device.createPipelineLayout({
+        bindGroupLayouts: [bindGroupLayout],
+      }),
+      compute: {
+        module: shaderModule,
+        entryPoint: "main",
+      },
+    });
+
+    // 5: Create GPUCommandEncoder to issue commands to the GPU
+    const commandEncoder = device.createCommandEncoder();
+
+    // 6: Initiate render pass
+    const passEncoder = commandEncoder.beginComputePass();
+
+    // 7: Issue commands
+    passEncoder.setPipeline(computePipeline);
+    passEncoder.setBindGroup(0, bindGroup);
+    passEncoder.dispatchWorkgroups(Math.ceil(BUFFER_SIZE / 64));
+
+    // End the render pass
+    passEncoder.end();
+
+    // Copy output buffer to staging buffer
+    commandEncoder.copyBufferToBuffer(
+      outputBuffer,
+      0, // Source offset
+      stagingBuffer,
+      0, // Destination offset
+      BUFFER_SIZE
+    );
+
+    // 8: End frame by passing array of command buffers to command queue for execution
+    device.queue.submit([commandEncoder.finish()]);
+
+    // map staging buffer to read results back to JS
+    await stagingBuffer.mapAsync(
+      GPUMapMode.READ,
+      0, // Offset
+      BUFFER_SIZE // Length
+    );
+
+    const copyArrayBuffer = stagingBuffer.getMappedRange(0, BUFFER_SIZE);
+    const data = copyArrayBuffer.slice();
+    stagingBuffer.unmap();
+    const resultArray = new Float32Array(data);
+    console.log(resultArray);
+
+    if (statusEl) statusEl.textContent = "WebGPU compute pass completed successfully.";
+    if (codeEl) codeEl.textContent = Array.from(resultArray.slice(0, 50)).join(", ") + " ... (" + resultArray.length + " values)";
+  } catch (err) {
+    if (statusEl) statusEl.textContent = `Error: ${err.message}`;
+    if (codeEl) codeEl.textContent = err.stack || err.message;
   }
-
-  const device = await adapter.requestDevice();
-
-  // 2: Create a shader module from the shader template literal
-  const shaderModule = device.createShaderModule({
-    code: shader,
-  });
-
-  // 3: Create an output buffer to read GPU calculations to, and a staging buffer to be mapped for JavaScript access
-
-  const outputBuffer = device.createBuffer({
-    size: BUFFER_SIZE,
-    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC,
-  });
-
-  const stagingBuffer = device.createBuffer({
-    size: BUFFER_SIZE,
-    usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST,
-  });
-
-  // 4: Create a GPUBindGroupLayout to define the bind group structure, create a GPUBindGroup from it,
-  // then use it to create a GPUComputePipeline
-
-  const bindGroupLayout = device.createBindGroupLayout({
-    entries: [
-      {
-        binding: 0,
-        visibility: GPUShaderStage.COMPUTE,
-        buffer: {
-          type: "storage",
-        },
-      },
-    ],
-  });
-
-  const bindGroup = device.createBindGroup({
-    layout: bindGroupLayout,
-    entries: [
-      {
-        binding: 0,
-        resource: {
-          buffer: outputBuffer,
-        },
-      },
-    ],
-  });
-
-  const computePipeline = device.createComputePipeline({
-    layout: device.createPipelineLayout({
-      bindGroupLayouts: [bindGroupLayout],
-    }),
-    compute: {
-      module: shaderModule,
-      entryPoint: "main",
-    },
-  });
-
-  // 5: Create GPUCommandEncoder to issue commands to the GPU
-  const commandEncoder = device.createCommandEncoder();
-
-  // 6: Initiate render pass
-  const passEncoder = commandEncoder.beginComputePass();
-
-  // 7: Issue commands
-  passEncoder.setPipeline(computePipeline);
-  passEncoder.setBindGroup(0, bindGroup);
-  passEncoder.dispatchWorkgroups(Math.ceil(BUFFER_SIZE / 64));
-
-  // End the render pass
-  passEncoder.end();
-
-  // Copy output buffer to staging buffer
-  commandEncoder.copyBufferToBuffer(
-    outputBuffer,
-    0, // Source offset
-    stagingBuffer,
-    0, // Destination offset
-    BUFFER_SIZE
-  );
-
-  // 8: End frame by passing array of command buffers to command queue for execution
-  device.queue.submit([commandEncoder.finish()]);
-
-  // map staging buffer to read results back to JS
-  await stagingBuffer.mapAsync(
-    GPUMapMode.READ,
-    0, // Offset
-    BUFFER_SIZE // Length
-  );
-
-  const copyArrayBuffer = stagingBuffer.getMappedRange(0, BUFFER_SIZE);
-  const data = copyArrayBuffer.slice();
-  stagingBuffer.unmap();
-  console.log(new Float32Array(data));
 }
 
 init();
