@@ -6,11 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A resize event demo on MDN" />
     <title>Window Size Logger</title>
+    <style>
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #000;
+        color: #fff;
+        padding: 8px;
+        z-index: 100;
+        text-decoration: none;
+      }
+      .skip-link:focus {
+        top: 0;
+        outline: 3px solid #005fcc;
+      }
+      main:focus {
+        outline: none;
+      }
+    </style>
   </head>
   <body>
-    <p>Resize the browser window to fire the <code>resize</code> event.</p>
-    <p>Window height: <span id="height"></span></p>
-    <p>Window width: <span id="width"></span></p>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    <main id="main" tabindex="-1">
+      <p>Resize the browser window to fire the <code>resize</code> event.</p>
+      <p>Window height: <span id="height"></span></p>
+      <p>Window width: <span id="width"></span></p>
+    </main>
 
     <script>
       const heightOutput = document.querySelector("#height");
@@ -22,6 +44,7 @@
       }
 
       window.addEventListener("resize", resizeListener);
+      resizeListener();
     </script>
   </body>
 </html>
