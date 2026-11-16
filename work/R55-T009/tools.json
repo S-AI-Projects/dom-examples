@@ -1,0 +1,18 @@
+{
+  "taskId": "R55-T009",
+  "toolVersions": {
+    "node": "v24.22.1",
+    "playwright": "1.49.0",
+    "browser": "Chromium / Google Chrome (Headless)"
+  },
+  "assertions": [
+    "No uncaught page errors across both viewports",
+    "Source anchors #instructions, #output, #visual-info, #window-info visible at 360px",
+    "Source anchors visible at 1280px",
+    "prefers-reduced-motion: reduce correctly evaluated",
+    "Visible keyboard focus indicator present on #output at 360px and 1280px",
+    "Visible keyboard focus indicator present on #instructions at 360px and 1280px"
+  ],
+  "result": "PASSED",
+  "exitCode": 0
+}

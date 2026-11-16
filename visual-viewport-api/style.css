@@ -11,6 +11,14 @@ p {
 #instructions {
   position: relative;
   top: 90px;
+  max-width: 600px;
+  padding: 8px;
+}
+
+#instructions:focus,
+#instructions:focus-visible {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
 }
 
 #output {
@@ -19,5 +27,22 @@ p {
   left: 10px;
   border: solid 1px green;
   background: lime;
-  padding: 5px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+#output:focus,
+#output:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Motion preference rules */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
