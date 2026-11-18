@@ -14,3 +14,15 @@ This set of examples demonstrates usage of the [View Transition API](https://dev
 - [SPA transition types gallery](spa-gallery-transition-types/): SPA image gallery that uses transition types to apply different transition animations when the images are moved between using the prev button, next button, and by clicking directly on an image.
 - [MPA transition types example](mpa-chapter-nav-transition-types/): Story app with a chapter on each page. Demonstrates how to apply view transition animations across pages selectively with a transition type applied using the `@view-transition` at-rule.
 - [MPA multiple transition types example](mpa-chapter-nav-multiple-transition-types/): Story app with a chapter on each page. Demonstrates how to apply different view transition animations across pages selectively with different transition types. The transition type is determined on the fly with JavaScript during the navigation.
+
+## Cross-document support regression check
+
+From the repository root, run the Playwright check with Chromium available:
+
+```bash
+node tests/course/r55-t036.mjs
+```
+
+The check covers both CSS feature-present and feature-absent fixtures. In the
+unsupported fixture, the normal links and images remain usable and the page
+states the fallback behavior explicitly.

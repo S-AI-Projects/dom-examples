@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Cross-document view transition example: Page 2</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <p><a href="index.html">Go back to page 1</a></p>
+  <img src="images/image2.jpg" alt="A large green tropical leaf in the middle of a jungle.">
+  <div id="view-transition-support" role="status" aria-live="polite">Checking view-transition support...</div>
+  <script>
+    const supportMessage = document.querySelector('#view-transition-support');
+    supportMessage.textContent = CSS.supports('view-transition-name: root')
+      ? 'Cross-document view transitions enabled.'
+      : 'Cross-document view transitions are not supported; navigation still works normally.';
+  </script>
+</body>
+
+</html>
