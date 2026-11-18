@@ -33,3 +33,16 @@ Press the button to load an audio file, run speech recognition on it, and output
 [Run synthesis demo live](https://mdn.github.io/dom-examples/web-speech-api/speak-easy-synthesis/)
 
 Type words in the input then submit the form to hear it spoken. You can also select the different voices available on the system, and alter the rate and pitch.
+
+## Responsive layout regression check
+
+From the repository root, run the Playwright check with Chromium available:
+
+```bash
+node tests/course/r55-t032.mjs
+```
+
+The check serves the repository locally and verifies the landing page at
+360x800 and 1280x800. It asserts that all links remain visible in the expected
+order, the page does not introduce horizontal overflow, and the linked local
+stylesheet loads without a console error.
