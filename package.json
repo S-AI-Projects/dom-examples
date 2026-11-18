@@ -1,0 +1,8 @@
+{
+  "name": "dom-examples-course-checks",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "playwright": "1.65.1"
+  }
+}
