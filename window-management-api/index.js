@@ -25,6 +25,8 @@ let popoverElem = undefined;
 
 // Array to hold references to the currently open windows
 let windowRefs = [];
+let closeMonitor = null;
+let beforeUnloadRegistered = false;
 
 // Constants to represent the width and height of the Chrome UI when calculating the window size to open 
 const WINDOW_CHROME_Y = 51;
@@ -120,9 +122,17 @@ function closeAllWindows() {
     windowRef.close();
   });
   windowRefs = [];
+  if (closeMonitor !== null) {
+    clearInterval(closeMonitor);
+    closeMonitor = null;
+  }
 }
 
 async function openWindows() {
+  if (windowRefs.length > 0 || closeMonitor !== null) {
+    return;
+  }
+
   const screenDetails = await window.getScreenDetails();
 
   // Return the number of screens
@@ -196,7 +206,7 @@ async function openWindows() {
   // Check whether one of our popup windows has been closed
   // If so, close them all
 
-  const closeMonitor = setInterval(checkWindowClose, 250);
+  closeMonitor = setInterval(checkWindowClose, 250);
 
   function checkWindowClose() {
     if (windowRefs.some(windowRef => windowRef.closed)) {
@@ -207,9 +217,12 @@ async function openWindows() {
 
   // Also close our popup windows if the main app window is closed
 
-  window.addEventListener("beforeunload", () => {
-    closeAllWindows();
-  });
+  if (!beforeUnloadRegistered) {
+    window.addEventListener("beforeunload", () => {
+      closeAllWindows();
+    });
+    beforeUnloadRegistered = true;
+  }
 
   screenDetails.addEventListener("screenschange", () => {
     // If the new number of screens is different to the old number of screens, report the difference
