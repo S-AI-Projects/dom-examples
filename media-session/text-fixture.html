@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Media Session text rendering fixture</title>
+  </head>
+  <body>
+    <label>
+      Track title
+      <input id="track-title" />
+    </label>
+    <button id="render-title" type="button">Render title</button>
+    <output id="rendered-title" role="status"></output>
+    <script>
+      const input = document.querySelector('#track-title');
+      const output = document.querySelector('#rendered-title');
+      document.querySelector('#render-title').addEventListener('click', () => {
+        output.textContent = input.value;
+      });
+    </script>
+  </body>
+</html>

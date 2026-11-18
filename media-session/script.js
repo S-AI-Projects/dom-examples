@@ -5,13 +5,13 @@ const statusEl = document.querySelector('#status');
 
 function updateStatus(track, playState = 'Stopped') {
   // update header
-  statusEl.querySelector('h3').innerText = playState;
+  statusEl.querySelector('h3').textContent = playState;
 
   // update track info
   const info = statusEl.querySelectorAll('dd');
-  info[0].innerText = track.title;
-  info[1].innerText = track.artist;
-  info[2].innerText = track.album;
+  info[0].textContent = track.title;
+  info[1].textContent = track.artist;
+  info[2].textContent = track.album;
 
   //update image
   statusEl.querySelector('img').src = track.artwork[1].src;
