@@ -31,9 +31,13 @@
   <div>
 
   </div>
+  <p id="animation-status" role="status" aria-live="polite">
+    Animation is running.
+  </p>
 
   <script>
     const divElem = document.querySelector('div');
+    const statusElem = document.querySelector('#animation-status');
 
     let rotate360 = [
       { transform: 'rotate(360deg)' }
@@ -44,7 +48,11 @@
       iterations: Infinity
     }
 
-    divElem.animate( rotate360, slowInfinite );
+    if (typeof divElem.animate === 'function') {
+      divElem.animate( rotate360, slowInfinite );
+    } else {
+      statusElem.textContent = 'Web Animations API is not supported in this browser.';
+    }
 
   </script>
 </body>

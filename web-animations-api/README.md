@@ -15,6 +15,19 @@ let rotate360 = [
 
 
 ## Automatically removing filling animations
+
+## Empty/error-state regression check
+
+From the repository root, run the Playwright check with Chromium available:
+
+```bash
+node tests/course/r55-t033.mjs
+```
+
+The check exercises both the normal animation path and a fixture where the
+Web Animations API is unavailable. The latter must show a readable status and
+must not produce an uncaught page error.
+
 It is possible to trigger a large number of animations on the same element. If they are indefinite (i.e., forwards-filling), this can result in a huge animations list, which could create a memory leak. For this reason, we’ve implemented the part of the Web Animations spec that automatically removes overriding forward filling animations, unless the developer explicitly specifies to keep them.
 
 [See a live demo of this](https://mdn.github.io/dom-examples/web-animations-api/replace-indefinite-animations.html). 
