@@ -33,3 +33,9 @@ Press the button to load an audio file, run speech recognition on it, and output
 [Run synthesis demo live](https://mdn.github.io/dom-examples/web-speech-api/speak-easy-synthesis/)
 
 Type words in the input then submit the form to hear it spoken. You can also select the different voices available on the system, and alter the rate and pitch.
+# Browser accessibility regression check
+
+From the repository root, install the development dependency with `npm install`,
+then run `node tests/course/r55-t041.mjs`. The Playwright check serves this
+static example locally and verifies the skip link, focus indicator, Tab order,
+and Enter activation without requesting browser speech permissions.
