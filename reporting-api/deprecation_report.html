@@ -3,6 +3,7 @@
 <head>
   <title>ReportingObserver demo: Deprecation report</title>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     video {
       display: block;
@@ -13,21 +14,32 @@
   </style>
 </head>
 <body>
+  <main>
+    <h1>Deprecation report walkthrough</h1>
+    <p>Use the button to display deprecation reports collected by this page.</p>
   <video controls>
     <p>Video not supported in your browser.</p>
   </video>
 
-  <button>Show reports</button>
+  <button type="button">Show reports</button>
 
-  <div class="output"></div>
+  <div class="output" aria-live="polite"></div>
+  </main>
 
   <script>
     // Get reference to button
     const reportBtn = document.querySelector('button');
 
-    // Set up function to display reports
-    function displayReports(reports) {
+    const observedReports = [];
+
+    function displayReports() {
       const outputElem = document.querySelector('.output');
+      outputElem.replaceChildren();
+      const reports = [...observer.takeRecords(), ...observedReports];
+      if (reports.length === 0) {
+        outputElem.textContent = 'No deprecation reports have been observed yet.';
+        return;
+      }
       const list = document.createElement('ul');
       outputElem.appendChild(list);
 
@@ -49,14 +61,19 @@
     }
 
     // Set up reporting observer
-    let options = {
+    const options = {
       types: ['deprecation'],
       buffered: true
-    }
+    };
 
-    let observer = new ReportingObserver(function(reports, observer) {
-      reportBtn.onclick = () => displayReports(reports);
-    }, options);
+    if (typeof ReportingObserver === 'function') {
+      var observer = new ReportingObserver((reports) => observedReports.push(...reports), options);
+      observer.observe();
+    } else {
+      reportBtn.disabled = true;
+      document.querySelector('.output').textContent = 'ReportingObserver is not supported in this browser.';
+    }
+    reportBtn.addEventListener('click', displayReports);
 
     // try to use old-style getUserMedia
     const videoElem = document.querySelector('video');
@@ -69,44 +86,16 @@
       }
     }
 
-    observer.observe();
-
-    if(navigator.mozGetUserMedia) {
-      navigator.mozGetUserMedia(
-        constraints,
-        success,
-        failure);
-    } else {
-      navigator.getUserMedia(
-        constraints,
-        success,
-        failure);
-    }
-
-    let takenRecords = observer.takeRecords();
-    console.log(takenRecords);
-
-    if(navigator.mozGetUserMedia) {
-      navigator.mozGetUserMedia(
-        constraints,
-        success,
-        failure);
-    } else {
-      navigator.getUserMedia(
-        constraints,
-        success,
-        failure);
-    }
-
-    // observer.disconnect();
-
-    function success(stream) {
-      videoElem.srcObject = stream;
-      videoElem.onloadedmetadata = () => videoElem.play();
-    }
-
-    function failure(e) {
-      console.log('The following gUM error occured: ' + e)
+    // Keep the legacy call behind feature detection. It is only used to create
+    // a deprecation report and must not prevent the report viewer from working.
+    const legacyGetUserMedia = navigator.mozGetUserMedia ?? navigator.getUserMedia;
+    if (typeof legacyGetUserMedia === 'function') {
+      try {
+        legacyGetUserMedia.call(navigator, constraints, () => {}, () => {});
+      } catch {
+        // Permission denial is expected when the demo is not served from a
+        // secure context or the user has not granted camera access.
+      }
     }
   </script>
 
