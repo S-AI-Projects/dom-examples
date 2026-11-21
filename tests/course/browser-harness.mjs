@@ -41,7 +41,7 @@ export async function runBrowserTest(taskId, callback) {
   const { server, baseUrl } = await startServer();
   let browser;
   try {
-    browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] });
+    browser = await chromium.launch({ headless: true });
     const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
     await context.route("**/*", (route) =>
       route.request().url().startsWith(baseUrl) ? route.continue() : route.abort()
