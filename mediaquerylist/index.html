@@ -30,31 +30,29 @@
   <body>
     <h1>matchMedia test</h1>
 
-    <p></p>
+      <p id="feature-status" role="status" aria-live="polite"></p>
 
     <script>
       var para = document.querySelector("p");
+      if (typeof window.matchMedia !== "function") {
+        para.textContent = "Media queries are unavailable in this browser. The example content remains available.";
+        document.body.style.backgroundColor = "#e5e5e5";
+      } else {
+        var mql = window.matchMedia("(max-width: 600px)");
 
-      var mql = window.matchMedia("(max-width: 600px)");
-
-      function screenTest(e) {
-        if (e.matches) {
-          /* the viewport is 600 pixels wide or less */
-          para.textContent = "This is a narrow screen — less than 600px wide.";
-          document.body.style.backgroundColor = "red";
-        } else {
-          /* the viewport is more than 600 pixels wide */
-          para.textContent = "This is a wide screen — more than 600px wide.";
-          document.body.style.backgroundColor = "blue";
+        function screenTest(e) {
+          if (e.matches) {
+            para.textContent = "This is a narrow screen — less than 600px wide.";
+            document.body.style.backgroundColor = "red";
+          } else {
+            para.textContent = "This is a wide screen — more than 600px wide.";
+            document.body.style.backgroundColor = "blue";
+          }
         }
+
+        screenTest(mql);
+        mql.addEventListener("change", screenTest, false);
       }
-
-      screenTest(mql);
-      mql.addEventListener("change", screenTest, false);
-
-      mql.onchange = function () {
-        console.log(mql);
-      };
     </script>
   </body>
 </html>
