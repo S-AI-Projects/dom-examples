@@ -11,23 +11,31 @@ body {
 }
 
 form {
-  width: 60%;
+  width: min(100%, 300px);
   margin: 10px auto;
 }
 
 form input {
-  width: 55%;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 form label {
-  width: 40%;
-  margin-right: 5%;
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 form button {
-  width: 60%;
+  width: min(100%, 220px);
   display: block;
   margin: 10px auto 0;
+}
+
+iframe {
+  box-sizing: border-box;
+  display: block;
+  max-width: 100%;
+  margin: 0 auto 1rem;
 }
 
 p {
