@@ -1,30 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Canvas chroma keying</title>
     <style>
       body {
         background: black;
-        color:#CCCCCC; 
-      }
-      #c2 {
-        background-image: url(media/foo.png);
-        background-repeat: no-repeat;
+        color: #cccccc;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 1rem;
+        margin: 1rem;
       }
       div {
-        float: left;
-        border :1px solid #444444;
-        padding:10px;
-        margin: 10px;
-        background:#3B3B3B;
+        box-sizing: border-box;
+        border: 1px solid #444444;
+        padding: 10px;
+        background: #3b3b3b;
+        max-width: 100%;
+      }
+
+      video {
+        display: block;
+        max-width: 100%;
+      }
+
+      .video-panel {
+        flex: 1 1 18rem;
+        min-width: 0;
+      }
+
+      .canvas-panel {
+        display: flex;
+        flex: 0 1 auto;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      canvas {
+        max-width: 100%;
+      }
+
+      :focus-visible {
+        outline: 3px solid #ffdf5d;
+        outline-offset: 3px;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
       }
     </style>
   </head>
 
   <body>
-    <div>
-      <video id="video" src="media/video.mp4" controls="true"/>
+    <div class="video-panel">
+      <video id="video" src="media/video.mp4" controls aria-label="Chroma key source video">
+        Video is unavailable in this browser.
+      </video>
+      <p id="motion-note">Motion starts only when you choose Play. Reduced-motion users can leave the video paused.</p>
     </div>
-    <div>
+    <div class="canvas-panel">
       <canvas id="c1" width="160" height="96"></canvas>
       <canvas id="c2" width="160" height="96"></canvas>
     </div>
