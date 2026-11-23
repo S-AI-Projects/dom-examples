@@ -17,28 +17,47 @@ if (localStorage.promptHistory) {
 }
 
 let session;
+let initializing = false;
+let currentAbortController = null;
+
 textarea.addEventListener("focus", () => {
   if (!("LanguageModel" in window)) {
     promptOutput.innerHTML = `<span class="error">Your browser doesn't support the Prompt API!</span>`;
     return;
   }
 
-  if (!session) {
+  if (!session && !initializing) {
     init();
   }
 });
 
 async function init() {
-  session = await getSession(promptHistory);
-  promptOutput.textContent = `Session created.`;
-  submitBtn.disabled = false;
+  initializing = true;
+  try {
+    session = await getSession(promptHistory);
+    promptOutput.textContent = `Session created.`;
+    submitBtn.disabled = false;
+  } finally {
+    initializing = false;
+  }
 }
 
 form.addEventListener("submit", handleSubmission);
 
+abortBtn.addEventListener("click", () => {
+  if (currentAbortController) {
+    currentAbortController.abort("Query aborted by user.");
+    currentAbortController = null;
+    submitBtn.disabled = false;
+    abortBtn.disabled = true;
+  }
+});
+
 deleteBtn.addEventListener("click", () => {
   localStorage.removeItem("promptHistory");
-  window.location.reload();
+  promptHistory = [];
+  deleteBtn.disabled = true;
+  promptOutput.textContent = "History deleted.";
 });
 
 async function handleSubmission(e) {
@@ -54,17 +73,13 @@ async function handleSubmission(e) {
     submitBtn.disabled = true;
     abortBtn.disabled = false;
 
-    const controller = new AbortController();
-    abortBtn.addEventListener("click", () => {
-      controller.abort("Query aborted by user.");
-      submitBtn.disabled = false;
-      abortBtn.disabled = true;
-    });
+    currentAbortController = new AbortController();
 
     const response = await session.prompt(textarea.value, {
-      signal: controller.signal,
+      signal: currentAbortController.signal,
     });
 
+    currentAbortController = null;
     promptOutput.textContent = response;
 
     submitBtn.disabled = false;
