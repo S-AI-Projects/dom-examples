@@ -1,10 +1,31 @@
-Examples:
+# Pointer Events Examples
 
-* [Drawing program](https://mdn.github.com/dom-examples/pointerevents/Using_Pointer_Events.html). This application is a Pointer Events version of the [Touch Events drawing program](https://developer.mozilla.org/en-US/docs/Web/API/Touch_events/Using_Touch_Events). The application is described in [Using Pointer Events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events/Using_Pointer_Events).
-* [Multi-touch interaction demo](http://mdn.github.io/dom-examples/pointerevents/Multi-touch_interaction.html). This interactive demo shows how to use Pointer Events for mulit-touch interaction. The application is described in [Multi-touch interaction](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events/Multi-touch_interaction).
-* [Two-pointer Pinch/Zoom Demo](http://mdn.github.io/dom-examples/pointerevents/Pinch_zoom_gestures.html). This interactive demo shows how to recognize a simple two-pointer pinch/zoom gesture. The application is described in [Pinch zoom gestures](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events/Pinch_zoom_gestures).
+Interactive code examples demonstrating the W3C Pointer Events API for single and multi-touch interactions.
 
-External Pointer Events Demos:
+## Demos
 
-* [Patrick H Lauke's site](http://patrickhlauke.github.io/touch/)
-* [Pointer Events demo](http://limpet.net/pointer.html) described in Mozilla Hacks article [Pointer Events now in Firefox Nightly](https://hacks.mozilla.org/2015/08/pointer-events-now-in-firefox-nightly/) by Matt Brubeck and  Jason Weathersby
+* **[Drawing program](https://mdn.github.io/dom-examples/pointerevents/Using_Pointer_Events.html)**: Pointer Events drawing program.
+* **[Multi-touch interaction](http://mdn.github.io/dom-examples/pointerevents/Multi-touch_interaction.html)**: Multi-touch interaction demo.
+* **[Two-pointer Pinch/Zoom Demo](http://mdn.github.io/dom-examples/pointerevents/Pinch_zoom_gestures.html)**: Two-pointer pinch-to-zoom gesture recognition.
+  * Entry Point: `pointerevents/Pinch_zoom_gestures.html`
+  * Source Anchors: `#target`, `#log`, `#clearlog`
+
+## Running Locally
+
+Serve using a local HTTP server:
+
+```bash
+npx serve .
+# or
+python -m http.server 8000
+```
+
+Open `http://localhost:8000/pointerevents/Pinch_zoom_gestures.html` in your browser.
+
+## Automated Regression Check
+
+Run the regression test that distinguishes correct pinch gesture handling from broken bindings:
+
+```bash
+node tests/course/r55-t030.mjs
+```

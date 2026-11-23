@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WebXR Safe Text Rendering Companion</title>
+    <script src="safe-text.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <h1>WebXR Companion: Safe Text Rendering</h1>
+      <p>Companion demonstrating safe text insertion without XSS or markup execution.</p>
+      <div>
+        <label for="text-input">Fixture label or user note:</label>
+        <input id="text-input" type="text" />
+      </div>
+      <button type="button" id="render-text">Render text</button>
+      <h2>Rendered Output</h2>
+      <p id="text-output" aria-live="polite"></p>
+    </main>
+  </body>
+</html>
