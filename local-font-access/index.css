@@ -12,6 +12,12 @@ select {
   padding: 5px;
 }
 
+button:focus-visible,
+select:focus-visible {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
+}
+
 html {
   font-family: Arial, Helvetica, sans-serif;
   height: 100%;

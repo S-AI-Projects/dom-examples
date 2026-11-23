@@ -10,46 +10,73 @@
 <body>
 <h1>Simple Stream Pump</h1>
 <p>The left tortoise is the original, the right one is created using a custom stream.</p>
-<img src="tortoise.png" width="150" height="84" alt="Tortoise Original">
-<img src="." width="150" height="84" alt="Tortoise Copy" id="target">
+<div class="stream-container">
+  <img src="tortoise.png" width="150" height="84" alt="Tortoise Original">
+  <img width="150" height="84" alt="Tortoise Copy" id="target">
+</div>
+<p id="stream-status" role="status" style="margin-top: 1rem; font-family: sans-serif;"></p>
 <script>
   const image = document.getElementById('target');
+  const statusElem = document.getElementById('stream-status');
 
-  // Fetch the original image
-  fetch('./tortoise.png')
-  // Retrieve its body as ReadableStream
-  .then(response => response.body)
-  .then(rs => {
-    const reader = rs.getReader();
+  const supportsReadableStream = typeof window.ReadableStream === 'function' &&
+    'body' in Response.prototype;
 
-    return new ReadableStream({
-      async start(controller) {
-        while (true) {
-          const { done, value } = await reader.read();
-
-          // When no more data needs to be consumed, break the reading
-          if (done) {
-            break;
-          }
-
-          // Enqueue the next data chunk into our target stream
-          controller.enqueue(value);
+  if (!supportsReadableStream) {
+    statusElem.textContent = 'ReadableStream API is not supported in this browser.';
+    statusElem.style.color = '#b00020';
+    image.style.display = 'none';
+  } else {
+    statusElem.textContent = 'Streaming image data...';
+    // Fetch the original image
+    fetch('./tortoise.png')
+      // Retrieve its body as ReadableStream
+      .then(response => {
+        if (!response.body) {
+          throw new Error('ReadableStream not supported on response body.');
         }
+        return response.body;
+      })
+      .then(rs => {
+        const reader = rs.getReader();
 
-        // Close the stream
-        controller.close();
-        reader.releaseLock();
-      }
-    })
-  })
-  // Create a new response out of the stream
-  .then(rs => new Response(rs))
-  // Create an object URL for the response
-  .then(response => response.blob())
-  .then(blob => URL.createObjectURL(blob))
-  // Update image
-  .then(url => image.src = url)
-  .catch(console.error);
+        return new ReadableStream({
+          async start(controller) {
+            while (true) {
+              const { done, value } = await reader.read();
+
+              // When no more data needs to be consumed, break the reading
+              if (done) {
+                break;
+              }
+
+              // Enqueue the next data chunk into our target stream
+              controller.enqueue(value);
+            }
+
+            // Close the stream
+            controller.close();
+            reader.releaseLock();
+          }
+        });
+      })
+      // Create a new response out of the stream
+      .then(rs => new Response(rs))
+      // Create an object URL for the response
+      .then(response => response.blob())
+      .then(blob => URL.createObjectURL(blob))
+      // Update image
+      .then(url => {
+        image.src = url;
+        image.style.display = 'inline-block';
+        statusElem.textContent = 'Stream pumped successfully.';
+        statusElem.style.color = '#1b5e20';
+      })
+      .catch(err => {
+        statusElem.textContent = 'Stream error: ' + err.message;
+        statusElem.style.color = '#b00020';
+      });
+  }
 </script>
 </body>
 </html>
