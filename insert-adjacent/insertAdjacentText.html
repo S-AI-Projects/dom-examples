@@ -11,6 +11,13 @@
       input {
         margin-bottom: 0.5rem;
       }
+
+      .message {
+        color: #b00020;
+        font-size: 0.9rem;
+        min-height: 1.2rem;
+        margin: 0.25rem 0;
+      }
     </style>
   </head>
   <body>
@@ -24,6 +31,7 @@
     </section>
 
     <input type="text" /><br />
+    <p class="message" role="status" aria-live="polite"></p>
     <button class="before">Insert before</button>
     <button class="after">Insert after</button>
     <button class="reset">Reset demo</button>
@@ -37,17 +45,29 @@
       var initContent = para.textContent;
 
       var textInput = document.querySelector("input");
+      var message = document.querySelector(".message");
 
       resetBtn.addEventListener("click", function () {
         para.textContent = initContent;
         textInput.value = "";
+        message.textContent = "";
       });
 
       beforeBtn.addEventListener("click", function () {
+        if (!textInput.value.trim()) {
+          message.textContent = "Please enter text to insert.";
+          return;
+        }
+        message.textContent = "";
         para.insertAdjacentText("afterbegin", textInput.value);
       });
 
       afterBtn.addEventListener("click", function () {
+        if (!textInput.value.trim()) {
+          message.textContent = "Please enter text to insert.";
+          return;
+        }
+        message.textContent = "";
         para.insertAdjacentText("beforeend", textInput.value);
       });
     </script>

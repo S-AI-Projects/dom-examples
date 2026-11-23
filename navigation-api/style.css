@@ -46,9 +46,23 @@ h2 {
   border-radius: 4px;
   padding: 0.5rem;
   margin: 2em 0;
-  white-space: pre;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  box-sizing: border-box;
   font-family: monospace;
   min-height: 2rem;
+}
+
+label {
+  display: block;
+  margin: 0.75rem 0;
+}
+
+dialog#are-you-sure {
+  max-width: min(90vw, 480px);
+  box-sizing: border-box;
 }
 
 #console::before {
