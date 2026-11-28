@@ -6,3 +6,22 @@ Examples:
 * [Simple writer](http://mdn.github.io/dom-examples/streams/simple-writer/): This example shows how to to write to a writable stream, then decode the stream and write the contents to the UI.
 * [Transform binary chunks to strings](http://mdn.github.io/dom-examples/streams/strings-transform-stream/): In this example, binary data chunks of a text file are converted to string lines by a [```TransformStream```](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream).
 * [Unpack chunks of a PNG](http://mdn.github.io/dom-examples/streams/png-transform-stream/): This example shows how [```pipeThrough()```](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream/pipeThrough) can be used to transform a ReadableStream into a stream of other data types by transforming a data of a PNG file into a stream of PNG chunks.
+## Simple Stream Pump: Browser Support and Tests
+
+This example uses the Web Streams API to copy image data through a custom ReadableStream.
+
+If the browser does not support the required Streams API features, a fallback message is displayed.
+
+### Run the example
+
+From the repository root, run `python3 -m http.server 8000`.
+
+Open `http://localhost:8000/streams/simple-pump/`.
+
+### Run automated tests
+
+Run `npm ci`, then `npx playwright install chromium`.
+
+Run the regression test using `node tests/course/r55-t026.mjs`.
+
+The test checks both supported and unsupported Streams API paths.
