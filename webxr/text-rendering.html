@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Safe Text Rendering Example</title>
+  <link rel="stylesheet" href="./text-rendering.css">
+  <script src="./text-rendering.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Safe Text Rendering</h1>
+    <p>Enter fixture text below. It will be displayed as plain text.</p>
+
+    <label for="fixture-text">Fixture text</label>
+    <textarea id="fixture-text" rows="4"></textarea>
+
+    <button id="render-text" type="button">Render text</button>
+
+    <h2>Rendered output</h2>
+    <pre id="text-output" aria-live="polite"></pre>
+  </main>
+</body>
+</html>
