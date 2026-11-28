@@ -8,3 +8,11 @@ External Pointer Events Demos:
 
 * [Patrick H Lauke's site](http://patrickhlauke.github.io/touch/)
 * [Pointer Events demo](http://limpet.net/pointer.html) described in Mozilla Hacks article [Pointer Events now in Firefox Nightly](https://hacks.mozilla.org/2015/08/pointer-events-now-in-firefox-nightly/) by Matt Brubeck and  Jason Weathersby
+
+## R55-T030 Regression Test
+
+From the repository root, run:
+
+`node tests/course/r55-t030.mjs`
+
+The test starts a local HTTP server, launches Playwright Chromium, checks pointer logging and pinch-zoom behavior, and verifies that a deliberately broken `pointermove` binding is detected. It also checks for unexpected browser page errors and cleans up the browser and server.
