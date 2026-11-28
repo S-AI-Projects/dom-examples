@@ -1,0 +1,13 @@
+
+{
+  "name": "dom-examples",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Code examples for DOM and Web APIs",
+  "scripts": {
+    "test:r55-t026": "node tests/course/r55-t026.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.65.1"
+  }
+}
